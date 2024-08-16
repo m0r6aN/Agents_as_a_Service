@@ -1,8 +1,8 @@
-# Multi-Agent Framework for Process Automation
+# Agents as a Service (AaaS)
 
 ## Overview
 
-This Multi-Agent Framework is a flexible and extensible system designed for process automation using a combination of specialized agents. It allows for the creation of complex workflows by orchestrating multiple agents, each responsible for specific tasks within a process.
+Agents as a Service (AaaS) is a flexible and extensible system designed for process automation using a combination of specialized agents. It allows for the creation of complex workflows by orchestrating multiple agents, each responsible for specific tasks within a process.
 
 Key features:
 - Modular architecture with reusable core components
@@ -10,62 +10,117 @@ Key features:
 - Built-in monitoring and logging capabilities
 - Extensible design for adding new agents and functionalities
 - Asynchronous execution for improved performance
+- Docker containerization for consistent deployment
+- Kubernetes support for scalable and manageable deployments
 
 ## Table of Contents
 
-1. [Framework Structure](#framework-structure)
-2. [Setup](#setup)
-3. [Usage](#usage)
-4. [Creating a New Process](#creating-a-new-process)
-5. [Core Agents](#core-agents)
-6. [Extending the Framework](#extending-the-framework)
-7. [Contributing](#contributing)
-8. [License](#license)
+1. [Core Components](#core-components)
+2. [Framework Architecture](#framework-architecture)
+3. [Project Structure](#project-structure)
+4. [Setup](#setup)
+5. [Usage](#usage)
+6. [Creating a New Process](#creating-a-new-process)
+7. [Core Components](#core-components)
+8. [Docker Containerization](#docker-containerization)
+9. [Kubernetes Deployment](#kubernetes-deployment)
+10. [Contributing](#contributing)
+11. [License](#license)
 
-## Framework Structure
+## Core Components
+
+AaaS provides several core components that can be extended and customized:
+
+- **Agents**: Base classes for creating specialized agents.
+- **System Messages**: Predefined messages for agent communication.
+- **Prompts**: Templates for generating queries or instructions.
+- **Actions**: Reusable functions that agents can perform.
+- **Tools**: Utility functions for common tasks.
+
+Refer to the files in the `core/` directory for more details on each component.
+
+
+## Framework Architecture
+The following diagram represents the high-level architecture of the Agents as a Service (AaaS) framework:
+
+[Insert the Mermaid diagram here]
+
+This diagram illustrates the key components of the AaaS framework:
+- The Orchestrator manages multiple Processes.
+- Each Process consists of multiple Agents.
+- All Agents utilize Core Components (Base Agent, System Messages, Prompts, Actions, and Tools).
+- Monitoring and Logging Agents provide system-wide capabilities.
+- Processes are containerized using Docker and can be deployed to a Kubernetes cluster.
+
+
+## Project Structure
 
 ```
-multi_agent_framework/
+agents_as_a_service/
 ├── core/
 │   ├── agents/
 │   │   ├── base.py
 │   │   ├── monitoring_agent.py
 │   │   └── logging_agent.py
+│   ├── system_messages/
+│   │   ├── base_messages.py
+│   │   └── specialized_messages.py
+│   ├── prompts/
+│   │   ├── base_prompts.py
+│   │   └── specialized_prompts.py
+│   ├── actions/
+│   │   ├── file_actions.py
+│   │   └── data_actions.py
+│   ├── tools/
+│   │   ├── file_utils.py
+│   │   └── data_processing.py
 │   ├── process.py
 │   └── orchestrator.py
 ├── processes/
-│   └── file_processing/
-│       ├── config.py
-│       ├── custom_agents.py
-│       ├── process.py
-│       └── main.py
+│   ├── process1/
+│   │   ├── Dockerfile
+│   │   ├── requirements.txt
+│   │   ├── .dockerignore
+│   │   ├── config.py
+│   │   ├── custom_agents.py
+│   │   ├── process.py
+│   │   └── main.py
+│   └── process2/
+│       └── ...
+├── kubernetes/
+│   ├── process1/
+│   │   └── deployment.yaml
+│   └── process2/
+│       └── deployment.yaml
 ├── tests/
 ├── setup.py
-└── requirements.txt
+├── pyproject.toml
+├── requirements.txt
+└── README.md
 ```
 
 ## Setup
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/multi-agent-framework.git
-   cd multi-agent-framework
+   git clone https://github.com/yourusername/agents_as_a_service.git
+   cd agents_as_a_service
    ```
 
-2. Create a virtual environment:
+2. Set up a virtual environment:
    ```
    python -m venv venv
    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
 
-3. Install the required packages:
-   ```
-   pip install -r requirements.txt
-   ```
-
-4. Install the framework in editable mode:
+3. Install the project in editable mode:
    ```
    pip install -e .
+   ```
+
+4. Install development dependencies:
+   ```
+   pip install -r requirements-dev.txt
    ```
 
 ## Usage
@@ -74,18 +129,13 @@ Here's a basic example of how to use the framework:
 
 ```python
 import asyncio
-from multi_agent_framework.core.orchestrator import OrchestratorAgent
-from processes.file_processing.process import FileProcessingProcess
-from processes.file_processing.config import PROCESS_CONFIG
+from agents_as_a_service.core.orchestrator import OrchestratorAgent
+from agents_as_a_service.processes.process1.process import Process1
+from agents_as_a_service.processes.process1.config import PROCESS_CONFIG
 
 async def main():
-    # Create a process instance
-    process = FileProcessingProcess(PROCESS_CONFIG)
-    
-    # Create an orchestrator with the process agents
+    process = Process1(PROCESS_CONFIG)
     orchestrator = OrchestratorAgent(process.agents)
-    
-    # Execute the process
     result = await orchestrator.execute(process.workflow, {})
     print(f"Process completed. Result: {result}")
 
@@ -103,11 +153,13 @@ To create a new process:
    - `custom_agents.py`: Custom agents specific to your process
    - `process.py`: Process definition
    - `main.py`: Entry point for running the process
+   - `Dockerfile`: For containerization
+   - `requirements.txt`: Process-specific dependencies
 
 3. Define your custom agents in `custom_agents.py`:
 
 ```python
-from multi_agent_framework.core.agents.base import BaseAgent
+from agents_as_a_service.core.agents.base import BaseAgent
 
 class MyCustomAgent(BaseAgent):
     def __init__(self, config):
@@ -122,7 +174,7 @@ class MyCustomAgent(BaseAgent):
 4. Define your process in `process.py`:
 
 ```python
-from multi_agent_framework.core.process import ProcessBase
+from agents_as_a_service.core.process import ProcessBase
 from .custom_agents import MyCustomAgent
 
 class MyCustomProcess(ProcessBase):
@@ -142,24 +194,79 @@ class MyCustomProcess(ProcessBase):
         })
 ```
 
-5. Implement the main execution in `main.py`.
+## Docker Containerization
 
-## Core Agents
+Each process in AaaS can be containerized using Docker. Here's a basic `Dockerfile` template:
 
-The framework provides two core agents that are automatically included in every process:
+```dockerfile
+FROM python:3.9-slim
 
-1. **MonitoringAgent**: Monitors system resources (CPU, memory, disk usage).
-2. **LoggingAgent**: Provides centralized logging for the entire process.
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-These agents are automatically added to your process and included in the workflow.
+WORKDIR /app
 
-## Extending the Framework
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-To extend the framework:
+COPY . .
 
-1. Add new core agents in `multi_agent_framework/core/agents/`.
-2. Create new base classes for different types of agents or processes in the core module.
-3. Implement new utility functions or tools in the core module that can be used across different processes.
+CMD ["python", "main.py"]
+```
+
+To build and run a Docker container for a process:
+
+1. Navigate to the process directory:
+   ```
+   cd processes/process1
+   ```
+
+2. Build the Docker image:
+   ```
+   docker build -t aaas-process1 .
+   ```
+
+3. Run the Docker container:
+   ```
+   docker run aaas-process1
+   ```
+
+## Kubernetes Deployment
+
+AaaS processes can be deployed to Kubernetes for scalable and manageable operations. Here's a basic deployment template:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aaas-process1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aaas-process1
+  template:
+    metadata:
+      labels:
+        app: aaas-process1
+    spec:
+      containers:
+      - name: aaas-process1
+        image: your-registry/aaas-process1:latest
+        env:
+        - name: CONFIG_PATH
+          value: /app/config.py
+```
+
+To deploy a process to Kubernetes:
+
+1. Ensure you have `kubectl` installed and configured.
+2. Apply the deployment:
+   ```
+   kubectl apply -f kubernetes/process1/deployment.yaml
+   ```
+
+For more complex deployments, consider using Helm charts or Kubernetes Operators.
 
 ## Contributing
 

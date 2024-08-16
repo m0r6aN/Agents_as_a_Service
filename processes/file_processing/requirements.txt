@@ -1,0 +1,5 @@
+# Docker-specific requirements.txt
+numpy==1.20.0
+pandas==1.2.0
+google-cloud-storage==2.0.0
+google-cloud-aiplatform==1.0.0

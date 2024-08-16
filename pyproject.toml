@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "agents-as-a-service"
+version = "0.1.0"
+description = "\"A flexible and extensible system for process automation using specialized agents\""
+authors = ["Clint Morgan <clintemorgan@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

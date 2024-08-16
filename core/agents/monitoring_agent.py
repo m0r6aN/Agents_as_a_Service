@@ -1,7 +1,7 @@
 # File: multi_agent_framework/core/agents/monitoring_agent.py
 
 import psutil
-from .base import BaseAgent
+from .base_agent import BaseAgent
 from typing import Dict, Any
 
 class MonitoringAgent(BaseAgent):

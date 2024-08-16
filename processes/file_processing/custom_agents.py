@@ -5,6 +5,8 @@ import os
 import csv
 from typing import Dict, Any
 
+# Example storage monitoring agent.
+# Monitors input directory for new files
 class FileMonitorAgent(BaseAgent):
     def __init__(self, config):
         super().__init__("File Monitor", "Monitors input directory for new files")
@@ -15,6 +17,8 @@ class FileMonitorAgent(BaseAgent):
         files = [f for f in os.listdir(self.input_directory) if f.split('.')[-1] in self.file_types]
         return {"files": files}
 
+# Example file processing agent.
+# Processes files and performs word count
 class FileProcessorAgent(BaseAgent):
     def __init__(self, config):
         super().__init__("File Processor", "Processes files and performs word count")
@@ -34,6 +38,8 @@ class FileProcessorAgent(BaseAgent):
             content = file.read()
             return len(content.split())
 
+# Example result writer agent
+# Writes processing results to output file
 class ResultWriterAgent(BaseAgent):
     def __init__(self, config):
         super().__init__("Result Writer", "Writes processing results to output file")
@@ -48,3 +54,4 @@ class ResultWriterAgent(BaseAgent):
             for filename, count in processed_files.items():
                 writer.writerow([filename, count])
         return {"output_file": output_file}
+    

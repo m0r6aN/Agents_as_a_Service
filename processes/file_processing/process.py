@@ -1,7 +1,7 @@
 # File: processes/file_processing/process.py
 
 from core import ProcessBase
-from .custom_agents import FileMonitorAgent, FileProcessorAgent, ResultWriterAgent
+from custom_agents import FileMonitorAgent, FileProcessorAgent, ResultWriterAgent
 
 class FileProcessingProcess(ProcessBase):
     def __init__(self, config):

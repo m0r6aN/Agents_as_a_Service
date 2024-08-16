@@ -1,5 +1,5 @@
 {
     "python.analysis.extraPaths": [
-        "./ai_agent_env/agents"
+        "./aaas_core/agents"
     ]
 }
