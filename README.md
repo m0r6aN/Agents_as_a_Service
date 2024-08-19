@@ -2,16 +2,20 @@
 
 ## Overview
 
-Agents as a Service (AaaS) is a flexible and extensible system designed for process automation using a combination of specialized agents. It allows for the creation of complex workflows by orchestrating multiple agents, each responsible for specific tasks within a process.
+Agents as a Service (AaaS) is your go-to solution for automating processes with the power of specialized AI agents. This system offers unparalleled flexibility and scalability, making it a breeze to design and deploy complex workflows by seamlessly orchestrating multiple agents, each laser-focused on their part of the process.
 
-Key features:
-- Modular architecture with reusable core components
-- Customizable processes with specific agents and workflows
-- Built-in monitoring and logging capabilities
-- Extensible design for adding new agents and functionalities
-- Asynchronous execution for improved performance
-- Docker containerization for consistent deployment
-- Kubernetes support for scalable and manageable deployments
+## Why AaaS?
+* Smart Automation: Self-orchestrated, intelligent, and works in any cloud environment.
+* Rapid Development: Quickly design and implement custom processes handled by 1 to n agents.
+* Modular & Reusable: A modular architecture with core components you can reuse across projects.
+* Monitoring & Logging: Keep tabs on everything with built-in monitoring and logging.
+* Hybrid Architecture: Combines SLM and LLM with intelligent routing.
+* Security First: Secure ingress filtering to thwart prompt injection attacks.
+* Blazing Fast: Prompt caching boosts performance like a champ.
+* Highly Extensible: Easily add new agents and functionalities as your needs evolve.
+* Asynchronous Execution: Boost performance with non-blocking, asynchronous operations.
+* Consistent Deployment: Dockerized for easy and reliable deployment.
+* Scalable & Manageable: Kubernetes support for deployment at scale with minimal fuss.
 
 ## Table of Contents
 
