@@ -151,6 +151,8 @@ if __name__ == "__main__":
 
 To create a new process:
 
+#### NOTE: The code shown here are very simplified examples of code that is generated using the SynthetIQ UI - https://github.com/m0r6aN/Synthet-IQ
+
 1. Create a new directory under `processes/` for your process.
 2. Create the following files in your process directory:
    - `config.py`: Process configuration
