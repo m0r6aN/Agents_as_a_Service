@@ -1,6 +1,6 @@
 # File: processes/file_processing/custom_agents.py
 
-from core.agents import BaseAgent
+from agent import BaseAgent
 import os
 import csv
 from typing import Dict, Any

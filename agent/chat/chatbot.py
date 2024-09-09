@@ -3,7 +3,7 @@
 import re
 import os
 from openai import OpenAI
-from .base_agent import BaseAgent
+from ..base_agent import BaseAgent
 from dotenv import load_dotenv
 load_dotenv()
 

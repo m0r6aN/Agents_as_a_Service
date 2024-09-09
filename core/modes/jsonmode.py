@@ -35,7 +35,7 @@ class Character(BaseModel):
         }
 
 # serialize pydantic model into json schema
-pydantic_schema = Character.schema_json()
+pydantic_schema = Character.model_json_schema()
 
 class ModelInference:
     def __init__(self, model_path, chat_template, load_in_4bit):

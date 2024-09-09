@@ -1,0 +1,3 @@
+flask
+pika  # For RabbitMQ or similar service bus
+networkx  # For task sequencing (DAG)

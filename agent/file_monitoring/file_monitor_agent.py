@@ -1,5 +1,6 @@
 # File: agents_as_a_service/core/agents/file_monitor_agent.py
 
+from typing import Dict
 from .base_agent import BaseAgent
 from ..actions.file_actions import get_file_info
 from ..actions.gcp_actions import validate_csv_ai
@@ -19,7 +20,7 @@ class FileMonitorAgent(BaseAgent):
         )
         self.config = config
 
-    async def execute(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute(self, input_data: Dict[str, any]) -> Dict[str, any]:
         file_path = input_data["file_path"]
         file_info = self.run_action("get_file_info", file_path)
         file_hash = self.run_action("get_file_hash", file_path)
@@ -34,3 +35,11 @@ class FileMonitorAgent(BaseAgent):
             "file_hash": file_hash,
             "validation_result": validation_result
         }
+        
+    def reset(self):
+        """
+        Reset the agent's state, clearing the conversation history.
+        """
+        self.messages = []
+        if self.system_message:
+            self.messages.append({"role": "system", "content": self.system_message})

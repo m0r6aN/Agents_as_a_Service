@@ -9,23 +9,22 @@ client = OpenAI(api_key)
 
 assistant = client.beta.assistants.create(
   instructions="You are a weather bot. Use the provided functions to answer questions.",
-  model="gpt-4o",
+  model="gpt-4o-mini",
   tools=[
     {
       "type": "function",
       "function": {
-        "name": "get_current_temperature",
-        "description": "Get the current temperature for a specific location",
+        "name": "get_latest_ohlcv",
+        "description": "Gets the latest OHLCV (Open, High, Low, Close, Volume) data for a specific cryptocurrency",
         "parameters": {
           "type": "object",
           "properties": {
-            "location": {
+            "stmbol": {
               "type": "string",
-              "description": "The city and state, e.g., San Francisco, CA"
+              "description": "The symbol of the cryptocurrency, e.g., BTC, ETH, ADA"
             },
-            "unit": {
+            "timeframe": {
               "type": "string",
-              "enum": ["Celsius", "Fahrenheit"],
               "description": "The temperature unit to use. Infer this from the user's location."
             }
           },
