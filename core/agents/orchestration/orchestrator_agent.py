@@ -1,42 +1,45 @@
+# agents_as_a_service/core/agents/orchestration/orchestrator_agent.py
+
 import logging
-from typing import Dict, Any, List
-from core.decorators.retry import Retry
-from core.execution_context import ExecutionContext
+from core.agent import Agent
+from core.utils.task_handler import TaskHandler
 
 class Orchestrator:
-    @Retry.retry_on_exception(max_retries=3, delay=2, exceptions=(Exception,))
+    def __init__(self):
+        self.db = DatabaseClient()  # For storing agent configurations dynamically
+
+    async def create_or_load_agent(self, agent_config):
+        """
+        Either load an existing agent from the database or create a new one dynamically.
+        """
+        agent_id = agent_config.get("id")
+        if agent_id and self.db.agent_exists(agent_id):
+            # Load existing agent
+            agent = Agent(agent_name="")
+            agent.load_agent(agent_id)
+        else:
+            # Create a new dynamic agent
+            agent = Agent(agent_name=agent_config["name"], tools=agent_config.get("tools"))
+            agent.save_agent()  # Save the new agent to the database
+        
+        return agent
+
     async def execute(self, process, context):
         """
-        Facilitates the execution of the workflow.
-        Receives the workflow from the Process instance and executes tasks based on dependencies.
+        Facilitates the execution of the workflow, dynamically creating and assigning agents.
         """
-        logging.info("Executing workflow...")
-        
-        # Get the agents from the process
-        self.agents = process.agents
-        
-        # Get the starting task from the process
-        current_task = process.get_start_task()  # Use the get_start_task method to get the first task
+        # Get the tasks from the process
+        tasks = process.workflow["tasks"]
 
-        while current_task:
-            # Access the workflow's tasks properly
-            task_info = process.workflow["tasks"][current_task]  # Correctly access the tasks dictionary
-            agent = self.agents[task_info["agent"]]
-            action = task_info["action"]
-            input_data = task_info.get("input_data", {})
-
-            # Execute the action asynchronously
-            result = await agent._execute_task_async(action, input_data)
-            context.update_state(current_task, result)
-
-            # Handle task-specific completion actions if they exist
-            if hasattr(context, "handle_" + action):
-                handle_method = getattr(context, "handle_" + action)
-                handle_method(result)
-
-            # Get the next task based on workflow completion and dependencies
-            current_task = self.get_next_task(process.workflow, context)
-
+        for task_name, task_info in tasks.items():
+            # Dynamically create or load an agent
+            agent_config = task_info.get("agent_config")
+            agent = await self.create_or_load_agent(agent_config)
+            
+            # Delegate the task to the agent
+            result = await agent.execute_task(task_info["action"], task_info.get("input_data", {}))
+            context.update_state(task_name, result)
+            
     def get_next_task(self, workflow, context):
         """
         Retrieve the next task in the workflow based on completed tasks and dependencies.
@@ -46,4 +49,5 @@ class Orchestrator:
                 return task_name
         return None
 
-
+    def are_dependencies_met(self, task_info, context):
+        return all(dep in context.completed_tasks for dep in task_info.get('dependencies', []))
