@@ -1,11 +1,12 @@
 import logging
-from your_database_module import DatabaseClient
+from core.utils.db_interactions import DatabaseClient
 
 class Agent:
-    def __init__(self, agent_name, tools=None, memory=None, config=None):
+    def __init__(self, agent_id, agent_name, tools=None, memory=None, config=None):
         """
         Initialize the agent with its name, tools, and other configurations.
         """
+        self.agent_id = agent_id
         self.agent_name = agent_name
         self.tools = tools if tools else []
         self.memory = memory if memory else {}

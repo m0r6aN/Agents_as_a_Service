@@ -1,7 +1,6 @@
 import json
 import sqlite3
 
-
 class DatabaseClient:
     def __init__(self, conn=None):
         self.conn = conn or sqlite3.connect('agents_db.sqlite')
@@ -104,6 +103,21 @@ class DatabaseClient:
             'result': task[4],
             'created_at': task[5]
         } for task in tasks]
+        
+    def get_agent_config_for_task(self, task_name):
+        # Query the database for the agent configuration based on the task
+        query = "SELECT * FROM agent_configs WHERE task_name = ?"
+        result = self.execute_query(query, [task_name])
+        
+        if result:
+            return result[0]  # Return the config details
+        return None
+
+    def relate_agent_to_config(self, agent_id, config_id):
+        # Insert relationship between agent and config into the database
+        query = "INSERT INTO agent_config_relationships (agent_id, config_id) VALUES (?, ?)"
+        self.execute_query(query, [agent_id, config_id])
+
 
     # AGENT MEMORY OPERATIONS
     def save_memory(self, agent_id, memory_data):
