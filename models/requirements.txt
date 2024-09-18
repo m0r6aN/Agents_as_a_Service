@@ -1,8 +1,0 @@
-pika
-networkx
-fastapi
-uvicorn
-transformers
-torch==1.10.0+cu113  # CUDA-enabled PyTorch (adjust version based on availability)
--f https://download.pytorch.org/whl/cu113/torch_stable.html  # Link to CUDA version of PyTorch
-sqlparse

@@ -1,8 +1,0 @@
-version: '3'
-services:
-  process1:
-    build: .
-    environment:
-      - API_KEY=${API_KEY}
-    volumes:
-      - ./data:/app/data

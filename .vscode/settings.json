@@ -1,7 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./aaas_core/agents",
-        "./core/process",
-        "./tests/core/test_"
-    ]
-}
