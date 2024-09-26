@@ -17,14 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow container mx-auto px-4 py-8">
-            {children}
-          </main>
-          <Footer />
-        </div>
+      <body className={`${inter.className} flex flex-col min-h-screen`}>
+        <Header />
+        <main className="flex-grow container mx-auto px-4 py-8">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   )

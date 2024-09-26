@@ -1,4 +1,5 @@
-import { Tool } from 'app/types'
+
+import { Tool } from '../types'
 import { supabase } from './supabase'
 
 export async function getTools(): Promise<Tool[]> {

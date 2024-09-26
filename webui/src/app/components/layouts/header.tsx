@@ -3,7 +3,7 @@ import SearchBar from '../ui/search-bar'
 import UserProfile from '../ui/user-profile'
 
 const navItems = [
-  { name: 'Processes', href: '/processes' },
+  { name: 'Process Manager', href: '/processes' },
   { name: 'Models', href: '/models' },
   { name: 'Tools', href: '/tools' },
   { name: 'Functions', href: '/functions' },

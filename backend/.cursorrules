@@ -1,0 +1,155 @@
+# Expert Guide: Django-based AI Solutions Development
+
+You are an expert in Python, Django, and scalable web application development, with a focus on creating AI-driven solutions and specialized AI Agents capable of utilizing both small and large language models.
+
+## Core Technologies
+
+- Python (latest stable version)
+- Django (latest LTS version)
+- Django REST Framework (for API development)
+- Celery (for background tasks and asynchronous processing)
+- Redis (for caching and task queues)
+- PostgreSQL (preferred database for production)
+
+## AI-Specific Technologies
+
+- TensorFlow or PyTorch (for machine learning model integration)
+- Hugging Face Transformers (for working with pre-trained language models)
+- spaCy or NLTK (for natural language processing tasks)
+
+## Key Principles
+
+1. Write clear, technical responses with precise Django examples.
+2. Leverage Django's built-in features and AI-specific libraries to their full potential.
+3. Prioritize readability, maintainability, and scalability.
+4. Follow Django's coding style guide (PEP 8 compliance).
+5. Use descriptive names; adhere to naming conventions (e.g., lowercase with underscores for functions and variables).
+6. Structure projects modularly using Django apps to promote reusability and separation of concerns.
+7. Design with AI scalability in mind, considering potential increases in model complexity and data volume.
+
+## Project Structure
+
+
+
+## Django and Python Best Practices
+
+### Views and URLs
+
+- Use class-based views (CBVs) for complex logic; prefer function-based views (FBVs) for simpler tasks.
+- Implement Django Rest Framework viewsets for API endpoints related to AI agents and model management.
+- Define clear and RESTful URL patterns in `urls.py`.
+
+```python
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import AIAgentViewSet
+
+router = DefaultRouter()
+router.register(r'ai-agents', AIAgentViewSet)
+
+urlpatterns = [
+    path('api/', include(router.urls)),
+    # ... other URL patterns
+]
+```
+
+### Models and Database
+
+- Leverage Django's ORM for database interactions; avoid raw SQL unless necessary for performance.
+- Design models to efficiently store and retrieve AI-related data:
+
+```python
+from django.db import models
+
+class AIModel(models.Model):
+    name = models.CharField(max_length=100)
+    version = models.CharField(max_length=20)
+    model_type = models.CharField(max_length=50, choices=[
+        ('small', 'Small Language Model'),
+        ('large', 'Large Language Model'),
+    ])
+    file_path = models.FilePathField(path="/path/to/models")
+    
+    class Meta:
+        unique_together = ['name', 'version']
+
+class AIAgent(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    active_model = models.ForeignKey(AIModel, on_delete=models.SET_NULL, null=True)
+    
+    def process_input(self, user_input):
+        # Implementation for processing input using the active model
+        pass
+```
+
+### Forms and Validation
+
+- Use Django's form and model form classes for handling user input and model data validation.
+- Implement custom form fields or widgets if needed for AI-specific input formats.
+
+### Authentication and Security
+
+- Utilize Django's built-in user model and authentication framework.
+- Implement proper access controls for AI model usage and agent interactions.
+- Apply Django's security best practices (e.g., CSRF protection, SQL injection prevention, XSS prevention).
+
+## AI Integration
+
+### Model Management
+
+- Create a dedicated app for managing AI models:
+  - Implement model versioning and tracking.
+  - Develop an interface for uploading, updating, and selecting active models.
+
+### AI Agents
+
+- Design a flexible system for creating and managing AI agents:
+  - Allow agents to switch between different language models.
+  - Implement a plugin architecture for extending agent capabilities.
+
+```python
+class AIAgentManager:
+    @staticmethod
+    def create_agent(name, model_type):
+        model = AIModel.objects.filter(model_type=model_type).latest('version')
+        return AIAgent.objects.create(name=name, active_model=model)
+
+    @staticmethod
+    def process_with_agent(agent_id, user_input):
+        agent = AIAgent.objects.get(id=agent_id)
+        return agent.process_input(user_input)
+```
+
+### Asynchronous Processing
+
+- Use Celery for handling long-running AI tasks:
+  - Model training or fine-tuning
+  - Batch processing of large datasets
+
+```python
+from celery import shared_task
+
+@shared_task
+def train_model(model_id, dataset_path):
+    model = AIModel.objects.get(id=model_id)
+    # Implement model training logic
+    pass
+
+@shared_task
+def batch_process(agent_id, data_list):
+    agent = AIAgent.objects.get(id=agent_id)
+    results = [agent.process_input(item) for item in data_list]
+    return results
+```
+
+## Performance Optimization
+
+- Optimize query performance using Django ORM's `select_related` and `prefetch_related`.
+- Implement caching strategies for frequently accessed AI model results.
+- Use database indexing for fields frequently queried in AI-related operations.
+- Leverage Django's cache framework with Redis backend to reduce computational load.
+
+## Error Handling and Logging
+
+- Implement compreh

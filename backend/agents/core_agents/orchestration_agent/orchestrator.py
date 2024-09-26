@@ -13,7 +13,7 @@ class OrchestratorAgent(Agent):
         super().__init__(
             agent_name="Orchestrator",
             system_message="",
-            model_name="GPT-4",
+            model_name="GPT-4o",
             tools=None
         )
         self.logger = logging.getLogger(self.agent_name)

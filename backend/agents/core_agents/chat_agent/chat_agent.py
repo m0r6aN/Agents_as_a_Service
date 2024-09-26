@@ -13,7 +13,7 @@ class ChatAgent(Agent):
         super().__init__(
             agent_name="ChatAgent",
             system_message="Assist users via chat interface for searching, reporting, and help.",
-            model_name="GPT-3.5",
+            model_name="GPT-4o",
             tools=None,
             config={'superior_agent_id': None}
         )
